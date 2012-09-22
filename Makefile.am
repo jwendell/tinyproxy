@@ -2,9 +2,12 @@ SUBDIRS = \
 	src \
 	data \
 	etc \
-	docs \
 	m4macros \
 	tests
+
+if BUILD_DOCS
+	SUBDIRS += docs
+endif
 
 # tools want this on a single line
 ACLOCAL_AMFLAGS = -I m4macros

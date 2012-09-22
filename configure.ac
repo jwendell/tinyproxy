@@ -288,12 +288,22 @@ AM_CONDITIONAL(HAVE_XMLLINT, test "x$XMLLINT" != "xno")
 AC_PATH_PROG(XSLTPROC, xsltproc, no)
 AM_CONDITIONAL(HAVE_XSLTPROC, test "x$XSLTPROC" != "xno")
 
-# Check for asciidoc
-AC_PATH_PROG(A2X, a2x, no)
-AM_CONDITIONAL(HAVE_A2X, test "x$A2X" != "xno")
-if test x"$A2X" = x"no"; then
-  AC_MSG_ERROR([Test for asciidoc failed. See the file 'INSTALL' for help.])
+dnl Generate docs?
+AH_TEMPLATE([BUILD_DOCS],
+	    [Build docs?])
+TP_ARG_ENABLE(docs,
+              [Generate docs (requires asciidoc, default is YES)],
+              yes)
+
+if test x"$docs_enabled" = x"yes"; then
+  # Check for asciidoc
+  AC_PATH_PROG(A2X, a2x, no)
+  if test x"$A2X" = x"no"; then
+    AC_MSG_ERROR([Asciidoc not found. It's required to build the docs.])
+  fi
 fi
+AM_CONDITIONAL(BUILD_DOCS, test "x$docs_enabled" = "xyes")
+AM_CONDITIONAL(HAVE_A2X, test "x$A2X" != "xno")
 
 AC_CONFIG_FILES([
 Makefile
